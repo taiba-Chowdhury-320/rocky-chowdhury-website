@@ -1,4 +1,3 @@
-// pages/login.js
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
@@ -16,37 +15,22 @@ export default function Login() {
     e.preventDefault();
     setError("");
     setLoading(true);
-
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
+    const result = await signIn("credentials", { email, password, redirect: false });
     setLoading(false);
-
-    if (result?.error) {
-      setError(result.error);
-    } else {
-      router.push("/chat");
-    }
-  };
-
-  const handleGoogle = () => {
-    signIn("google", { callbackUrl: "/chat" });
+    if (result?.error) setError(result.error);
+    else router.push("/chat");
   };
 
   const inputStyle = {
     width: "100%", padding: "0.85rem 1rem",
     background: "#0d0d0d", border: "1px solid #2a2a2a",
-    color: "#f0ebe0", fontSize: "0.875rem", outline: "none",
-    transition: "border-color 0.2s", fontFamily: "inherit"
+    color: "#f0ebe0", fontSize: "0.875rem",
+    outline: "none", transition: "border-color 0.2s", fontFamily: "inherit"
   };
 
   return (
     <>
       <Head><title>Login — Rocky Chowdhury</title></Head>
-
       <div style={{
         minHeight: "100vh", display: "flex", alignItems: "center",
         justifyContent: "center", padding: "2rem",
@@ -57,36 +41,25 @@ export default function Login() {
           border: "1px solid #1f1f1f", padding: "3rem",
           background: "#0d0d0d", animation: "fadeIn 0.5s ease"
         }}>
-          {/* Logo */}
           <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
             <Link href="/" style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "1.6rem", fontWeight: 600,
+              fontFamily: "'Cormorant Garamond', serif", fontSize: "1.6rem", fontWeight: 600,
               background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              backgroundClip: "text"
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
             }}>Rocky Chowdhury</Link>
-            <p style={{ color: "#555", fontSize: "0.8rem", marginTop: "0.5rem", letterSpacing: "0.08em" }}>
-              SIGN IN TO YOUR ACCOUNT
-            </p>
+            <p style={{ color: "#555", fontSize: "0.8rem", marginTop: "0.5rem", letterSpacing: "0.08em" }}>SIGN IN TO YOUR ACCOUNT</p>
           </div>
 
-          {/* Error */}
           {error && (
-            <div style={{
-              background: "rgba(224,82,82,0.1)", border: "1px solid rgba(224,82,82,0.3)",
-              color: "#e05252", padding: "0.75rem 1rem", fontSize: "0.8rem",
-              marginBottom: "1.5rem", letterSpacing: "0.02em"
-            }}>{error}</div>
+            <div style={{ background: "rgba(224,82,82,0.1)", border: "1px solid rgba(224,82,82,0.3)", color: "#e05252", padding: "0.75rem 1rem", fontSize: "0.8rem", marginBottom: "1.5rem" }}>{error}</div>
           )}
 
-          {/* Google */}
-          <button onClick={handleGoogle} style={{
+          <button onClick={() => signIn("google", { callbackUrl: "/chat" })} style={{
             width: "100%", padding: "0.85rem", background: "transparent",
-            border: "1px solid #2a2a2a", color: "#f0ebe0",
-            fontSize: "0.8rem", letterSpacing: "0.08em", textTransform: "uppercase",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem",
-            transition: "all 0.2s", marginBottom: "1.5rem", cursor: "pointer"
+            border: "1px solid #2a2a2a", color: "#f0ebe0", fontSize: "0.8rem",
+            letterSpacing: "0.08em", textTransform: "uppercase",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            gap: "0.75rem", marginBottom: "1.5rem", cursor: "pointer", transition: "all 0.2s"
           }}
             onMouseEnter={e => e.currentTarget.style.borderColor = "#c9a84c"}
             onMouseLeave={e => e.currentTarget.style.borderColor = "#2a2a2a"}
@@ -100,57 +73,40 @@ export default function Login() {
             Continue with Google
           </button>
 
-          {/* Divider */}
-          <div style={{
-            display: "flex", alignItems: "center", gap: "1rem",
-            marginBottom: "1.5rem"
-          }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
             <div style={{ flex: 1, height: "1px", background: "#1f1f1f" }} />
             <span style={{ color: "#444", fontSize: "0.72rem", letterSpacing: "0.1em" }}>OR</span>
             <div style={{ flex: 1, height: "1px", background: "#1f1f1f" }} />
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: "1rem" }}>
               <label style={{ display: "block", color: "#555", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "0.5rem" }}>Email</label>
-              <input
-                type="email" value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                required style={inputStyle}
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                placeholder="your@email.com" required style={inputStyle}
                 onFocus={e => e.target.style.borderColor = "#c9a84c"}
-                onBlur={e => e.target.style.borderColor = "#2a2a2a"}
-              />
+                onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
             </div>
-
             <div style={{ marginBottom: "2rem" }}>
               <label style={{ display: "block", color: "#555", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "0.5rem" }}>Password</label>
-              <input
-                type="password" value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required style={inputStyle}
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••" required style={inputStyle}
                 onFocus={e => e.target.style.borderColor = "#c9a84c"}
-                onBlur={e => e.target.style.borderColor = "#2a2a2a"}
-              />
+                onBlur={e => e.target.style.borderColor = "#2a2a2a"} />
             </div>
-
             <button type="submit" disabled={loading} style={{
               width: "100%", padding: "0.9rem",
               background: loading ? "#8a6f2e" : "#c9a84c",
-              color: "#080808", border: "none",
-              fontSize: "0.8rem", letterSpacing: "0.12em",
-              textTransform: "uppercase", fontWeight: 700,
-              cursor: loading ? "wait" : "pointer", transition: "all 0.2s"
+              color: "#080808", border: "none", fontSize: "0.8rem",
+              letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 700,
+              cursor: loading ? "wait" : "pointer"
             }}>
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
           <p style={{ textAlign: "center", color: "#444", fontSize: "0.78rem", marginTop: "2rem" }}>
-            No account?{" "}
-            <Link href="/register" style={{ color: "#c9a84c" }}>Create one free →</Link>
+            No account? <Link href="/register" style={{ color: "#c9a84c" }}>Create one free →</Link>
           </p>
         </div>
       </div>
